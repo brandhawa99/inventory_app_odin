@@ -1,1 +1,1 @@
-# inventory_app_odin
+# Inventory Management App
