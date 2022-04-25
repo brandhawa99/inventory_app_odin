@@ -13,7 +13,7 @@ var LeagueSchema = new Schema(
 LeagueSchema
 .virtual('url')
 .get(function(){
-    return '/leage/'+this.name+"/"+ this._id;
+    return '/league/'+this.name+"/"+ this._id;
 });
 
 
