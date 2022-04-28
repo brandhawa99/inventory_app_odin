@@ -5,13 +5,12 @@ var Schema = mongoose.Schema;
 
 var PlayerSchema = new Schema(
     {
-        first_name: {type:String, required},
-        last_name: {type:String, required},
-        birthday: {type:Date, required},
+        first_name: {type:String, required:true},
+        last_name: {type:String, required:true},
+        birthday: {type:Date, required:true},
         team:{type: Schema.Types.ObjectId, ref: 'Team'},
         position:{type: String},
-        goals:{type: Int32Array,default:0},
-        salary:{type:Double,default:0.00}
+        goals:{type: Number,default:0},
     }
 );
 
