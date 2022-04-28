@@ -4,32 +4,23 @@
   box-sizing: border-box;
 }
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
 }
 
-a {
-  color: #00B7FF;
-}
-.sidebar-nav{
-  list-style: none;
-  width: 300px;
-}
-.sidebar-nav  a{
+.header{
+  padding: 10px 7px;
+  font-weight:bolder;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: black;
   color: white;
-  padding: 10px 10px;
-  border-radius: 2.5rem;
 }
+.content-header{
+  display: flex;
+  padding: 50px 20px;
+  background-color: white;
 
-.sidebar-nav  a :hover{
-  background-color: rgb(17, 17, 17);
-  color: white;
-  padding: 10px 10px;
-  border-radius: 2.5rem;
 }
-.sidebar-nav li{
-  box-sizing: border-box;
-  margin-top: 25px;
-}
-
