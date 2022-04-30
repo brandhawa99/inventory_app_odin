@@ -9,7 +9,7 @@ var PlayerSchema = new Schema(
         last_name: {type:String, required:true},
         birthday: {type:Date, required:true},
         team:{type: Schema.Types.ObjectId, ref: 'Team'},
-        position:{type: String},
+        position:{type: String, maxlength:3 },
         goals:{type: Number,default:0},
     }
 );
