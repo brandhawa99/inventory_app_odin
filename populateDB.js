@@ -24,7 +24,7 @@ var teams = [];
 var players = [];
 
 //creates a new league and then appends it to the leagues array ^
-function leagueCreate(name){
+function leagueCreate(name, cb){
   league_detail = {name: name}
   var league = new League(league_detail);
 
@@ -55,4 +55,4 @@ function teamCreate(name,cb){
 
 //create a new player then append it to one of the teams
 
-function playerCreate(first_name, last_name, )
+function playerCreate(first_name, last_name, birthday, position)
