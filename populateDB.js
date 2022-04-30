@@ -14,7 +14,7 @@ var League = require('./models/league')
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0]
-mongoose.connect(mongoDB,{useNewUrlParser: true, useUnifiedTopology:true});
+mongoose.connect(mongoDB,{useNewUrlParser: true, useUnifiedTopology:true})
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, "MongoDB conection error:"));
@@ -55,4 +55,19 @@ function teamCreate(name,cb){
 
 //create a new player then append it to one of the teams
 
-function playerCreate(first_name, last_name, birthday, position)
+function playerCreate(first_name, last_name, birthday, position,cb){
+  var player = new Player({
+    first_name:first_name,
+    last_name: last_name,
+    birthday: birthday,
+    position:position
+  })
+  player.save(function(err){
+    if(err){
+      cb(err,null)
+      return;
+    }
+    console.log('New Player: ', player)
+    players.push(player);
+  })
+}
