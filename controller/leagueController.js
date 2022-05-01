@@ -28,6 +28,10 @@ exports.league_list = function(req,res,next){
   League.find()
   .exec(function(err,list_league){
     if(err){return next(err);}
-    res.render('league_list',{title: 'Leagues List', author_list: list_league})
+    res.render('league_list',{title: 'Leagues List', leagues: list_league})
   })
 };  
+
+exports.league_detail = function(req,res,next){
+  res.send('Todo implement detail page')
+}
