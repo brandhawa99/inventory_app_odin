@@ -10,6 +10,8 @@ var league_controller = require('../controller/leagueController');
 //GET HOME PAGE
 router.get('/', league_controller.index)
 
+
+//GET and POST REQUESTS FOR LEAGUE
 router.post('/leagues/:id/delete', league_controller.league_delete_post)
 
 router.get('/leagues/:id/delete',league_controller.league_delete_get)
@@ -25,5 +27,10 @@ router.get('/leagues/:id/update',league_controller.league_update_get)
 router.get('/leagues/:id',league_controller.league_detail)
 
 router.get('/leagues',league_controller.league_list)
+
+//GET AND POST REQUESTS FOR TEAMS
+
+//GET AND POST REQUESTS FOR PLAYERS
+
 
 module.exports = router ;
