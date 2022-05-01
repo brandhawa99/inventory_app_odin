@@ -11,7 +11,25 @@ html(lang='en')
     .header
       h1  Coolest Soccer Leagues
       div(class='col-sm-10')
-    .navigation
-      
+    ul.navigation
+      .viewplayers
+        li 
+          a(href='/league') Home
+        li 
+          a(href='/league/leagues') All Leagues
+        li 
+          a(href='/league/teams') All Teams
+        li 
+          a(href='/league/players') All Players 
+      .viewplayers
+        li
+          a(href='/league/league/create') Create League
+        li 
+          a(href='/league/team/create') Create Team
+        li 
+          a(href='/league/player/create ') Create Player
+          
+
+        
         
     block content
