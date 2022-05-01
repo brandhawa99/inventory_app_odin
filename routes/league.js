@@ -8,6 +8,8 @@ var league_controller = require('../controller/leagueController');
 
 //GET HOME PAGE
 router.get('/', league_controller.index)
+router.get('/leagues',league_controller.league_list)
+router.get('/league/leagues/:id',league_controller.league_detail)
 
 
 module.exports = router ;
