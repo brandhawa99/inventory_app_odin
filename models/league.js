@@ -13,8 +13,8 @@ var LeagueSchema = new Schema(
 LeagueSchema
 .virtual('url')
 .get(function(){
-    return '/league/'+this.name+"/"+ this._id;
+    return '/league/leagues/'+ this._id;
 });
 
 
-module.exports = mongoose.model('Book', LeagueSchema);
+module.exports = mongoose.model('League', LeagueSchema);
