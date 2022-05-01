@@ -3,7 +3,7 @@ extends layout
 block content
   .main-content 
     h1=title
-    ul
-    each league in leagues
-      li 
-        a(href=league.url) !{league.name}
+    ul.schema_lists
+      each league in leagues
+        li 
+          a(href=league.url) !{league.name.toUpperCase()}
