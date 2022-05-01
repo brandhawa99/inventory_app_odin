@@ -33,5 +33,29 @@ exports.league_list = function(req,res,next){
 };  
 
 exports.league_detail = function(req,res,next){
-  res.send('Todo implement detail page')
+  res.send('Todo implement detail page');
+}
+
+exports.league_create_post = function(req,res, next){
+  res.send('Need to be completed')
+}
+
+exports.league_create_get = function(req,res, next){
+  res.send('Need to be completed')
+}
+
+exports.league_delete_get = function(req,res,next){
+  res.send('Need to be completed');
+}
+
+exports.league_delete_post = function(req,res, next){
+  res.send('Need to be completed')
+}
+
+exports.league_update_get = function(req,res, next){
+  res.send('Need to be completed')
+}
+
+exports.league_update_post = function(req,res, next){
+  res.send('Need to be completed')
 }
