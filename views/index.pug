@@ -1,15 +1,16 @@
 extends layout
 
 block content
-  h1.content-header= title
+  .main-content 
 
-  if error 
-    p Error getting dynamic content.
-  else 
-    p Current stats of our leagues
+    if error 
+      p Error getting dynamic content.
+    else 
+      h1.content-header= title
+      h3  We currently have #[strong !{data.leagues}] Leagues
+      h3 With a total of #[strong !{data.teams}] Teams 
+      h3 And #[strong !{data.players}] Players
+      h3 come create a team and join one of our leagues 
 
-    ul 
-      li #[strong Leagues:] !{data.leagues}
-      li #[strong Teams:] !{data.teams}
-      li #[strong Players:] !{data.players}
+  
         
