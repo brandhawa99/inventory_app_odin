@@ -8,7 +8,6 @@ var PlayerSchema = new Schema(
         first_name: {type:String, required:true},
         last_name: {type:String, required:true},
         birthday: {type:Date, required:true},
-        team:{type: Schema.Types.ObjectId, ref: 'Team'},
         position:{type: String, maxlength:3 },
         goals:{type: Number,default:0},
     }
@@ -37,4 +36,4 @@ PlayerSchema
     return date;
 })
 
-module.exports = mongoose.model('PlayerSchema', PlayerSchema);
+module.exports = mongoose.model('Player', PlayerSchema);
