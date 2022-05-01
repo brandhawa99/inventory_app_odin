@@ -26,6 +26,7 @@ exports.index = function(req,res){
 
 exports.league_list = function(req,res,next){
   League.find()
+  .sort({name:1})
   .exec(function(err,list_league){
     if(err){return next(err);}
     res.render('league_list',{title: 'Leagues List', leagues: list_league})
