@@ -1,0 +1,9 @@
+extends layout 
+
+block content
+  .main-content 
+    h1=title
+    ul.schema_lists
+      each team in teams
+        li 
+          a(href=team.url) !{team.name.toUpperCase()}

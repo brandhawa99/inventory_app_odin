@@ -1,0 +1,9 @@
+extends layout 
+
+block content
+  .main-content 
+    h1=title
+    ul.schema_lists
+      each player in players
+        li 
+          a(href=player.url) !{player.name.toUpperCase()}
