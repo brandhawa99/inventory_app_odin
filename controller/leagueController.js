@@ -34,7 +34,14 @@ exports.league_list = function(req,res,next){
 };  
 
 exports.league_detail = function(req,res,next){
-  res.send('Todo implement detail page');
+  console.log(req.params.id)
+  League.findById(req.params.id)
+  .populate('teams')
+  .exec(function( err, results){
+    if(err){return next(err)}
+    res.render('league_detail',{title: results.name, teams: results.teams})
+  })
+  // res.send('Todo implement detail page');
 }
 
 exports.league_create_post = function(req,res, next){
