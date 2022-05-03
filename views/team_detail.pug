@@ -1,0 +1,9 @@
+
+extends layout 
+
+block content 
+  .detail_page 
+    h1=title
+    h3 record: !{team.wins} / !{team.loss}
+    each player  in players
+      a(href=player.url) !{player.name}!{"  ("+player.position+")"}
