@@ -1,0 +1,9 @@
+extends layout 
+
+block content 
+  .detail_page  
+    h1=player.name
+    ul 
+      li=player.birthday_formatted 
+      li positon: !{player.position}
+      li goals: !{player.goals}
