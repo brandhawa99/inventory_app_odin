@@ -18,6 +18,10 @@ body {
   background-color: black;
   color: white;
 }
+.bottom{
+  padding-left: 50px;
+  padding-right: 50px;
+}
 .content-header{
   display: flex;
   padding: 50px 20px;
@@ -66,4 +70,11 @@ body {
   flex-direction: column;
   gap: 20px;
 
+}
+
+.detail_page{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
