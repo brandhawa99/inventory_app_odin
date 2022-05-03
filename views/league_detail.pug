@@ -2,6 +2,18 @@
 extends layout 
 
 block content 
-  h1=title 
-  each team in teams 
-    a(href=team.url) !{team.name+ ' ('+ team.wins+"/"+team.loss+")"} 
+  .detail_page 
+    h1=title
+    each team in teams
+      .team  
+        a(href=team.url) !{team.name+ ' Record:('+ team.wins+"/"+team.loss+")"}
+        br
+        p Team Size: #[Strong !{team.players.length}] players
+        if team.players.length < 14
+          p Players needed 
+    else 
+      p There are no teams in this league.
+
+  hr
+  p 
+  a(href=league.url+'/delete') Delete League
