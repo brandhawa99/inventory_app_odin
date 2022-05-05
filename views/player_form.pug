@@ -8,11 +8,14 @@ block content
     input(type='text' name='last_name' placeholder='Last Name (Smith)' required='true' value=(undefined===player ?'': player.last_name))
     label(for="teams") Select a team: 
     select(name="teams" required='true')
-      option(value=undefined) Choose a Team
+      if(undefined==player_team)
+        option(value=undefined) Choose a Team
+      else 
+        option(value=player_team._id) !{player_team.name}
       each team in teams
         option(value=team._id) !{team.name}
     label(for="date_of_birth") Date of Birth 
-    input(type='date' name='date_of_birth' required='true' value=(undefined===player ?'':player.date_of_birth))
+    input(type='date' name='date_of_birth' required='true' value=(undefined===player ?'':birthday))
     label(for="position") Position 
     input(type="text", placeholder='D/M/S' name="position" required='true' value=(undefined===player ?'':player.position))
     hr
