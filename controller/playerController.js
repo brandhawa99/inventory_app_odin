@@ -3,7 +3,6 @@ var Team = require('../models/team')
 var Player = require('../models/player')
 const {body, validationResult} = require('express-validator');
 var async = require('async');
-const player = require('../models/player');
 require('dotenv').config();
 
 
