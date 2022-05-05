@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+  h1=title 
+  h2=player.name 
+  h4 #[strong Are you sure you want to delete this Player?]
+
+  form(method="POST" action='')
+    input(type='hidden' name='playerid', requried='true', value =player._id)
+    input(type="password", placeholder='password' name="password" requried='true')
+    button(type='submit') Delete
+
+  if errors
+    ul 
+      for error in errors 
+        li!=error.msg
