@@ -5,5 +5,10 @@ block content
     h1=player.name
     ul 
       li=player.birthday_formatted 
-      li positon: !{player.position}
+      li positon: !{player.position.toUpperCase()}
       li goals: !{player.goals}
+    
+  a(href=player.url+'/delete') Delete player 
+  hr
+  a(href=player.url+'/update') Update player 
+  
