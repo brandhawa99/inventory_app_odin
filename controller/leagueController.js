@@ -1,6 +1,8 @@
 var League = require('../models/league');
 var Player = require('../models/player');
 var Team = require('../models/team');
+require('dotenv').config();
+
 const {body, validationResult} = require('express-validator');
 
 var async = require('async');
@@ -35,7 +37,6 @@ exports.league_list = function(req,res,next){
 };  
 
 exports.league_detail = function(req,res,next){
-  console.log(req.params.id)
   League.findById(req.params.id)
   .populate('teams')
   .exec(function( err, results){
@@ -94,12 +95,31 @@ exports.league_delete_get = function(req,res,next){
   })
 }
 
-exports.league_delete_post = function(req,res, next){
-  res.send('Need to be completed')
-}
+exports.league_delete_post = [
+
+  //sanitize password
+  body('password', 'Incorrect Password').trim().equals(process.env.ADMIN_PASS).escape(),
+
+  (req,res,next) => {
+    const errors = validationResult(req);
+    
+    if(!errors.isEmpty()){
+      League.findById(req.params.id)
+        .exec(function(err,results){
+          res.render('league_delete', {title: 'delete this league',league:results, errors: errors.array()})
+        })
+    }else{
+      League.findByIdAndDelete(req.params.id)
+        .exec(function(err, results){
+          res.redirect('/league/leagues')
+      })
+    }
+  }
+
+]
+
 
 exports.league_update_get = function(req,res, next){
-  res.send('Need to be completed')
 }
 
 exports.league_update_post = function(req,res, next){
