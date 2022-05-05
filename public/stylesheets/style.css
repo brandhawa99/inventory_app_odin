@@ -78,3 +78,15 @@ body {
   justify-content: center;
   align-items: center;
 }
+.player_delete{
+  background-color: white;
+  border: none;
+  margin: 5px 10px;
+}
+.player_delete img{
+  width: 20px;
+}
+
+.player_delete img:hover{
+  transform: scale(1.2);
+}
