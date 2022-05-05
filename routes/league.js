@@ -32,7 +32,6 @@ router.get('/leagues',league_controller.league_list)
 
 //GET AND POST REQUESTS FOR TEAMS
 
-
 router.post('/team/create', team_controller.team_create_post)
 
 router.get('/team/create',team_controller.team_create)
@@ -43,9 +42,17 @@ router.get('/teams',team_controller.team_list)
 
 //GET AND POST REQUESTS FOR PLAYERS
 
+router.post('/players/:id/delete',player_controller.player_delete_post)
+
+router.get('/players/:id/delete',player_controller.player_delete_get)
+
 router.post('/players/create', player_controller.player_create_post)
 
 router.get('/players/create',player_controller.player_create);
+
+router.post('/players/:id/update',player_controller.player_update_post)
+
+router.get( '/players/:id/update',player_controller.player_update_get)
 
 router.get('/players/:id', player_controller.player_detail)
 
