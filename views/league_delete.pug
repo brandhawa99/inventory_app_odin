@@ -7,5 +7,10 @@ block content
 
   form(method="POST" action='')
     input(type='hidden' name='leagueid', requried='true', value =league._id)
-    input(type="text", placeholder='password' name="password" requried='true')
+    input(type="password", placeholder='password' name="password" requried='true')
     button(type='submit') Delete
+
+  if errors
+    ul 
+      for error in errors 
+        li!=error.msg
