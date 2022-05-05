@@ -6,7 +6,8 @@ block content
     ul.schema_lists
       each team in teams
         li 
-          a(href=team.url) !{team.name.toUpperCase()}
+          a(href=team.url) !{team.name.toUpperCase()}  
+          p wins: !{team.wins+" "}losses: !{team.loss} 
       
       else 
         li There are no teams.
