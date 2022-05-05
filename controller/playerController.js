@@ -1,6 +1,10 @@
 
-
+var Team = require('../models/team')
 var Player = require('../models/player')
+const {body, validationResult} = require('express-validator');
+var async = require('async')
+require('dotenv').config();
+
 
 exports.player_list = function(req,res,next){
   Player.find()
@@ -19,17 +23,114 @@ exports.player_detail= function(req,res,next){
 }
 
 exports.player_create = function(req,res,next){
-  res.send("need to implement")
+  Team.find()
+    .exec(function(err,results){
+      if(err){return next}
+      res.render('player_form',{title:'Create a new Player', teams:results})
+    })
 }
 
-exports.player_create_post = function(req,res,next){
-  res.send('need to implement')
-}
+exports.player_create_post = [
+  //validate and sanitize 
+  body('first_name').trim().isLength({min:1}).escape().withMessage("First name required.")
+    .isAlphanumeric().withMessage("First name has non-alphanumeirc characters."),
+  body('last_name').trim().isLength({min:1}).escape().withMessage("Last name required")
+    .isAlphanumeric().withMessage("First name has non-alphanumeirc characters."),
+  body('teams.*',"Must select a team").equals(undefined).escape(),
+    body('date_of_birth','Invalid date of brith').optional({checkFalsy:true}).isISO8601().toDate(),
+  body('position').trim().isLength({min:1}).escape().withMessage("Position required").isLength({max:3})
+    .withMessage("position field too long")
+    .isAlphanumeric().withMessage("Position field has non-alphanumeric characters"),
+  body('goals').trim().escape().isNumeric().withMessage('Must be a number'),
+
+  (req,res,next) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+      res.render('player_form',{title: 'Create a new player', player: req.body, erors: errors.array()})
+    }else{
+      var player = new Player({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        birthday: req.body.date_of_birth,
+        position: req.body.position,
+        goals: req.body.goals,
+      }); 
+      console.log(req.body.teams);
+      player.save(function(err){
+        if(err){return next(err)}
+        Team.findByIdAndUpdate(req.body.teams,{$push:{'players':player}},()=>{
+          if(err){return next(err)}
+          res.redirect(player.url)
+        })
+      })
+    }
+  }
+]
 
 exports.player_delete_get = function(req,res,next){
-  res.send('need to implement')
+  Player.findById(req.params.id)
+    .exec(function(err,results){
+      if(err){return(next)}
+      if(results.player === null){
+        res.redirect('/league/players')
+      }
+      res.render('player_delete', {title: 'Delete Player', player:results})
+    })
 }
 
-exports.player_delete_post = function(req,res,next){
-  res.send('need to implement')
+exports.player_delete_post = [
+  body('password', 'Admin password required.').trim().equals(process.env.ADMIN_PASS).escape(),
+  (req,res,next) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+      Player.findById(req.params.id)
+        .exec(function(err, results){
+          if(err){
+            console.log(err)
+            return next
+          }
+          res.render('player_delete', {title: 'Delete Player', player:results})
+        })
+    }else{
+      Player.findByIdAndDelete(req.body.playerid)
+        .exec(function(err, results){
+          if(err){
+            console.log(err)
+            return next
+          }
+          res.redirect('/league/players');
+        })
+    }
+  }
+]
+
+exports.player_update_get = function (req, res, next){
+  async.parallel({
+    player: function(callback){
+      Player.findById(req.params.id).exec(callback);
+    },
+    team: function(callback){
+      Team.find({'players':{'_id':req.params.id}}).exec(callback)
+    },
+    function(err,results){
+      if(err){return next(err)}
+      if(results.player === null){
+        var err = new Error ("Player not found")
+        err.status = 404
+        return next(err)
+      }
+      if(results.team === null){
+        var err = new Error("Team not found")
+        err.status = 404;
+        return next(err)
+      }
+      res.render('player_form',{title:'Update Book', player: results.player, team: results.team})
+    }
+  })
+}
+
+exports.player_update_post = function (req, res, next){
+  res.send('need to implement');
 }
