@@ -1,12 +1,10 @@
 var express = require('express');
-const { route } = require('express/lib/application');
 var router = express.Router();
 
 //Require controller modules.
 var league_controller = require('../controller/leagueController');
 var team_controller = require('../controller/teamController');
 var player_controller = require('../controller/playerController');
-const player = require('../models/player');
 
 //GET HOME PAGE
 router.get('/', league_controller.index)
