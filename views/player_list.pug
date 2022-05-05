@@ -7,3 +7,7 @@ block content
       each player in players
         li 
           a(href=player.url) !{player.name.toUpperCase()}
+          a(href=player.url+'/delete').player_delete
+            img(href=player.url+'/delete' src="https://cdn-icons-png.flaticon.com/512/2891/2891491.png", alt="delete")
+          a(href=player.url+'/update').player_delete
+            img(href=player.url+'/update' src='https://icons-for-free.com/iconfiles/png/512/refresh+reload+update+icon-1320191166843452904.png' alt="update")
