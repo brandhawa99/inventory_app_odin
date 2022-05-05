@@ -2,7 +2,8 @@
 var Team = require('../models/team')
 var Player = require('../models/player')
 const {body, validationResult} = require('express-validator');
-var async = require('async')
+var async = require('async');
+const player = require('../models/player');
 require('dotenv').config();
 
 
@@ -107,27 +108,46 @@ exports.player_delete_post = [
 ]
 
 exports.player_update_get = function (req, res, next){
+
   async.parallel({
-    player: function(callback){
-      Player.findById(req.params.id).exec(callback);
+    player : function(callback){
+      Player.findById(req.params.id)
+        .exec(callback)
     },
-    team: function(callback){
-      Team.find({'players':{'_id':req.params.id}}).exec(callback)
+
+    teams: function(callback){
+      Team.find()
+        .populate('players')
+        .exec(callback)
     },
-    function(err,results){
-      if(err){return next(err)}
-      if(results.player === null){
-        var err = new Error ("Player not found")
-        err.status = 404
-        return next(err)
+  }, function(err, results){
+      const playerID = results.player._id
+
+      let player_team = undefined
+      
+      for(let i = 0 ; i<results.teams.length ; i++){
+        for(let j = 0; j<results.teams[i].players.length ;j++){
+          if(results.teams[i].players[j]._id+"" == playerID+""){
+            player_team = results.teams[i];
+            break;
+          }
+        }
       }
-      if(results.team === null){
-        var err = new Error("Team not found")
+
+      if(err){ return next(err)}
+      if(results.player==null){
+        var err = new Error('Player not found');
+        err.status =404;
+        return next(err)
+      } 
+      if(results.teams==null){
+        console.log(results.teams)
+        var err = new Error("Team not found");
         err.status = 404;
-        return next(err)
+        return next(err);
       }
-      res.render('player_form',{title:'Update Book', player: results.player, team: results.team})
-    }
+      let player_birthday = results.player.birthday.toISOString().split("T")[0]
+      res.render('player_form',{title: 'Update Player', teams:results.teams, player: results.player, birthday: player_birthday, player_team: player_team })
   })
 }
 
