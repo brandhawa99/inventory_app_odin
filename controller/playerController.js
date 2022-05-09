@@ -150,6 +150,86 @@ exports.player_update_get = function (req, res, next){
   })
 }
 
-exports.player_update_post = function (req, res, next){
-  res.send('need to implement');
-}
+exports.player_update_post = [
+  //validate the post data 
+  body('first_name').trim().isLength({min:1}).escape().withMessage("First name required.")
+  .isAlphanumeric().withMessage("First name has non-alphanumeirc characters."),
+body('last_name').trim().isLength({min:1}).escape().withMessage("Last name required")
+  .isAlphanumeric().withMessage("First name has non-alphanumeirc characters."),
+body('teams.*',"Must select a team").equals(undefined).escape(),
+  body('date_of_birth','Invalid date of brith').optional({checkFalsy:true}).isISO8601().toDate(),
+body('position').trim().isLength({min:1}).escape().withMessage("Position required").isLength({max:3}).withMessage("position field too long")
+  .matches(/^[A-Za-z\s]+$/).withMessage('Position must be alphabetic.')
+  .isAlphanumeric().withMessage("Position field has non-alphanumeric characters"),
+  body('goals').trim().escape().isNumeric().withMessage('Must be a number'),
+  (req,res,next)=>{
+    const errors = validationResult(req);
+    
+    var player = new Player(
+      {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        birthday: req.body.date_of_birth,
+        position: req.body.position,
+        goals: req.body.goals,
+        _id : req.params.id // need to do this to make sure new id is not created
+      });
+      //
+      let player_team = undefined
+      if(!errors.isEmpty()){
+      async.parallel({
+        player : function(callback){
+          Player.findById(req.params.id)
+            .exec(callback)
+        },
+    
+        teams: function(callback){
+          Team.find()
+            .populate('players')
+            .exec(callback)
+        },
+      }, function(err, results){
+
+          //figure out what team the player is on 
+          const playerID = req.params.id  
+          for(let i = 0 ; i<results.teams.length ; i++){
+            for(let j = 0; j<results.teams[i].players.length ;j++){
+              if(results.teams[i].players[j]._id+"" == playerID+""){
+                player_team = results.teams[i];
+                  break;
+              }
+            }
+          }
+          if(err){ return next(err)}
+          if(results.player==null){
+            var err = new Error('Player not found');
+            err.status =404;
+            return next(err)
+          } 
+          if(results.teams==null){
+            console.log(results.teams)
+            var err = new Error("Team not found");
+            err.status = 404;
+            return next(err); 
+          }
+          let player_birthday = results.player.birthday.toISOString().split("T")[0]
+          res.render('player_form',{title: 'Update Player', teams:results.teams, player: results.player, birthday: player_birthday, player_team: player_team, errors: errors.array() })
+      });
+      return ;
+    }else{
+      Player.findByIdAndUpdate(req.params.id, player,{}, function(err,theplayer){
+        if(err) {
+          console.log(err)
+          return next(err)
+        }
+          console.log(req.body.teams, " THIS IS THE TEAM ", player_team)
+          res.redirect(theplayer.url)
+        // if(req.body.teams != player_team){
+        //   Team.deleteOne({'players':{'_id':req.params.id}})
+        //   Team.findByIdAndUpdate(req.body.teams,{$push:{'players':req.params.id}})
+        //   res.redirect(theplayer.url)
+        //   }
+      })
+    }
+  }
+]
