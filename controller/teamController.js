@@ -33,3 +33,11 @@ exports.team_delete_get = function(req,res,next){
 exports.team_delete_post= function (req,res,next){
   res.send('need to implement');
 }
+
+exports.team_update_get = function(req,res,next){
+  res.send('need to implement')
+}
+
+exports.team_update_post = function(req,res,next){
+  res.send("need to implement");
+}
