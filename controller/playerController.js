@@ -175,7 +175,6 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
         _id : req.params.id // need to do this to make sure new id is not created
       });
       //
-      let player_team = undefined
       if(!errors.isEmpty()){
       async.parallel({
         player : function(callback){
@@ -191,17 +190,6 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
       }, function(err, results){
 
           //figure out what team the player is on 
-          const playerID = req.params.id  
-          // for(let i = 0 ; i<results.teams.length ; i++){
-          //   for(let j = 0; j<results.teams[i].players.length ;j++){
-          //     if(results.teams[i].players[j]._id+"" == playerID+""){
-          //       player_team = results.teams[i];
-          //         break;
-          //     }
-          //   }
-          // }
-
-
 
           if(err){ return next(err)}
           if(results.player==null){
@@ -220,9 +208,11 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
       });
       return ;
     }else{
+      //check if the new team is the same team before the update
       Team.find({"_id":req.body.teams, 'players':{"_id":req.params.id}},function(err, results){
         if(err){return next(err)}
         if(!results.length){
+          // need to refactor this code 
           Team.find({'players':{"_id":req.params.id}},function(err, results){
             if(err){return next(err)}
             Team.updateOne({"players":{$pull:{"_id":req.params.id}}},function(err,results){
@@ -236,7 +226,6 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
       })
       Player.findByIdAndUpdate(req.params.id, player,{}, function(err,theplayer){
         if(err) {
-          console.log(err)
           return next(err)
         }
           res.redirect(theplayer.url)
