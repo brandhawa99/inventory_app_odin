@@ -156,7 +156,7 @@ exports.player_update_post = [
   .isAlphanumeric().withMessage("First name has non-alphanumeirc characters."),
 body('last_name').trim().isLength({min:1}).escape().withMessage("Last name required")
   .isAlphanumeric().withMessage("First name has non-alphanumeirc characters."),
-body('teams.*',"Must select a team").equals(undefined).escape(),
+body('teams.*',"Must select a team").equals(undefined).equals("Choose a Team").withMessage("No Team Selected").escape(),
   body('date_of_birth','Invalid date of brith').optional({checkFalsy:true}).isISO8601().toDate(),
 body('position').trim().isLength({min:1}).escape().withMessage("Position required").isLength({max:3}).withMessage("position field too long")
   .matches(/^[A-Za-z\s]+$/).withMessage('Position must be alphabetic.')
@@ -192,14 +192,17 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
 
           //figure out what team the player is on 
           const playerID = req.params.id  
-          for(let i = 0 ; i<results.teams.length ; i++){
-            for(let j = 0; j<results.teams[i].players.length ;j++){
-              if(results.teams[i].players[j]._id+"" == playerID+""){
-                player_team = results.teams[i];
-                  break;
-              }
-            }
-          }
+          // for(let i = 0 ; i<results.teams.length ; i++){
+          //   for(let j = 0; j<results.teams[i].players.length ;j++){
+          //     if(results.teams[i].players[j]._id+"" == playerID+""){
+          //       player_team = results.teams[i];
+          //         break;
+          //     }
+          //   }
+          // }
+
+
+
           if(err){ return next(err)}
           if(results.player==null){
             var err = new Error('Player not found');
@@ -217,18 +220,26 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
       });
       return ;
     }else{
+      Team.find({"_id":req.body.teams, 'players':{"_id":req.params.id}},function(err, results){
+        if(err){return next(err)}
+        if(!results.length){
+          Team.find({'players':{"_id":req.params.id}},function(err, results){
+            if(err){return next(err)}
+            Team.updateOne({"players":{$pull:{"_id":req.params.id}}},function(err,results){
+              if(err){return next(err)}
+            })
+            Team.updateOne({"_id":req.body.teams},{$push:{'players':req.params.id}},(function(err,results){
+              if(err){return next(err )}
+            }))
+          })
+        }
+      })
       Player.findByIdAndUpdate(req.params.id, player,{}, function(err,theplayer){
         if(err) {
           console.log(err)
           return next(err)
         }
-          console.log(req.body.teams, " THIS IS THE TEAM ", player_team)
           res.redirect(theplayer.url)
-        // if(req.body.teams != player_team){
-        //   Team.deleteOne({'players':{'_id':req.params.id}})
-        //   Team.findByIdAndUpdate(req.body.teams,{$push:{'players':req.params.id}})
-        //   res.redirect(theplayer.url)
-        //   }
       })
     }
   }
