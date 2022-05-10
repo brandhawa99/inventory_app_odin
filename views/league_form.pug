@@ -6,7 +6,7 @@ block content
 
   form(method='POST' action='')
     label(for='name') League Name:
-    input(type='text' placehold='League Name' name='name' required='true' value=(undefined===league ? '': league.name))
+    input(type='text' placeholder='League Name' name='name' required='true' value=(undefined===league ? '': league.name))
     button(type="submit") Submit
 
   if errors
