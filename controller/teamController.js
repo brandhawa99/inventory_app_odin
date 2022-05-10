@@ -19,7 +19,7 @@ exports.team_detail = function (req,res,next){
 }
 
 exports.team_create = function(req,res,next){
-  res.send('need to implements')
+  res.render('team_form',{title:'Create Team'})
 }
 
 exports.team_create_post = function(req,res,next){
