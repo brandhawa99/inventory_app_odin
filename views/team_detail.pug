@@ -7,3 +7,8 @@ block content
     h3 record: !{team.wins} / !{team.loss}
     each player  in players
       a(href=player.url) !{player.name}!{"  ("+player.position+")"}
+      
+  a(href=team.url+'/delete') Delete Team 
+  hr
+  a(href=team.url+'/update') Update Team 
+  
