@@ -15,11 +15,22 @@ exports.player_list = function(req,res,next){
 }
 
 exports.player_detail= function(req,res,next){
-  Player.findById(req.params.id)
-  .exec(function(err, player){
+
+  async.parallel({
+    Team: function(callback){
+      Team.find({'players':{"_id":req.params.id}})
+        .exec(callback);
+    },
+    Player: function(callback){
+      Player.findById(req.params.id)
+        .exec(callback);
+    },
+  
+  },
+  function(err, results){
     if(err){return next(err)}
-    res.render('player_detail',{player:player})
-  })
+    res.render('player_detail',{player:results.Player, team:results.Team ,NoTeam:'No Team'})
+  });
 }
 
 exports.player_create = function(req,res,next){
@@ -45,6 +56,7 @@ exports.player_create_post = [
 
   (req,res,next) => {
     const errors = validationResult(req);
+    console.log(req.body.old_team)
 
     if(!errors.isEmpty()){
       res.render('player_form',{title: 'Create a new player', player: req.body, erors: errors.array()})
@@ -164,7 +176,7 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
   body('goals').trim().escape().isNumeric().withMessage('Must be a number'),
   (req,res,next)=>{
     const errors = validationResult(req);
-    
+
     var player = new Player(
       {
         first_name: req.body.first_name,
@@ -190,7 +202,6 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
       }, function(err, results){
 
           //figure out what team the player is on 
-
           if(err){ return next(err)}
           if(results.player==null){
             var err = new Error('Player not found');
@@ -198,7 +209,6 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
             return next(err)
           } 
           if(results.teams==null){
-            console.log(results.teams)
             var err = new Error("Team not found");
             err.status = 404;
             return next(err); 
@@ -213,14 +223,11 @@ body('position').trim().isLength({min:1}).escape().withMessage("Position require
         if(err){return next(err)}
         if(!results.length){
           // need to refactor this code 
-          Team.find({'players':{"_id":req.params.id}},function(err, results){
+          Team.findByIdAndUpdate(req.body.old_team,{$pull:{'players':req.params.id}},function(err,results){
             if(err){return next(err)}
-            Team.updateOne({"players":{$pull:{"_id":req.params.id}}},function(err,results){
-              if(err){return next(err)}
-            })
-            Team.updateOne({"_id":req.body.teams},{$push:{'players':req.params.id}},(function(err,results){
-              if(err){return next(err )}
-            }))
+          })
+          Team.findByIdAndUpdate(req.body.teams,{$push:{'players':[req.params.id]}},function(err,results){
+            if(err){return next(err)}
           })
         }
       })
