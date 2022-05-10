@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var leagueRouter = require('./routes/league');
@@ -11,7 +12,7 @@ var app = express();
 
 //Set up mongoose connection 
 var mongoose = require('mongoose');
-var mongoDB = "mongodb+srv://bawa:bawa123@cluster0.mqety.mongodb.net/coolest_leagues?retryWrites=true&w=majority"
+var mongoDB = process.env.MONGO_URI
 mongoose.connect(mongoDB,{useNewUrlParser:true, useUnifiedTopology:true})
 var db = mongoose.connection;
 db.on('error',console.error.bind(console, 'MongoDB connection error:'))
