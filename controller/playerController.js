@@ -56,7 +56,6 @@ exports.player_create_post = [
 
   (req,res,next) => {
     const errors = validationResult(req);
-    console.log(req.body.old_team)
 
     if(!errors.isEmpty()){
       res.render('player_form',{title: 'Create a new player', player: req.body, erors: errors.array()})
@@ -68,7 +67,6 @@ exports.player_create_post = [
         position: req.body.position,
         goals: req.body.goals,
       }); 
-      console.log(req.body.teams);
       player.save(function(err){
         if(err){return next(err)}
         Team.findByIdAndUpdate(req.body.teams,{$push:{'players':player}},()=>{
