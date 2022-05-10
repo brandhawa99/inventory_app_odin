@@ -6,10 +6,10 @@ block content
 
   form(method='POST' action='')
     label(for='name') Team Name:
-    input(type='text' placeholder ='Team Name' name='name' required='true' value=(undefined===team ? '': team .name))
+    input(type='text' placeholder ='Team Name' name='name' required='true' value=(undefined===team ? '': team.name))
     select(name="leagues" required='true')
-      if(undefined==league)
-        option(value=undefined) Choose a Team
+      if(undefined==old_league)
+        option(value=undefined) Choose a League 
       else 
         option(value=league._id) !{league.name}
       each league_val in leagues
