@@ -8,12 +8,12 @@ block content
     label(for='name') Team Name:
     input(type='text' placeholder ='Team Name' name='name' required='true' value=(undefined===team ? '': team.name))
     select(name="leagues" required='true')
-      if(undefined==old_league)
+      if(undefined==team_league)
         option(value=undefined) Choose a League 
       else 
-        option(value=league._id) !{league.name}
-      each league_val in leagues
-        option(value=league_val._id) !{league_val.name}
+        option(value=team_league._id) !{team_league.name}
+      each league in leagues 
+        option(value=league._id) !{league.name}  
     hr
     label(for='wins') Wins: 
     input(type='number' name='wins' min=0 value=(undefined===team ? 0:team.win))
