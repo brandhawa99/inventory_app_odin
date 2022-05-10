@@ -55,9 +55,7 @@ function teamCreate(name,players,cb){
     cb(null, team)
   }  );
 }
-
 //create a new player then append it to one of the teams
-
 function playerCreate(first_name, last_name, birthday, position,cb){
   var player = new Player({
     first_name:first_name,
