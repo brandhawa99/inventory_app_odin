@@ -3,7 +3,11 @@ extends layout
 block content 
   .detail_page  
     h1=player.name
-    ul 
+    ul
+      if (!team==null) 
+        li=NoTeam 
+      else 
+        li #[strong Team]: !{ " "+team[0].name}
       li=player.birthday_formatted 
       li positon: !{player.position.toUpperCase()}
       li goals: !{player.goals}
