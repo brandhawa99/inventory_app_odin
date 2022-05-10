@@ -2,6 +2,10 @@ extends layout
 block content 
   h1=title 
   form(action="", method="post") 
+    if(undefined==player_team)
+      input(type='hidden' name='old_team', requried='true',value=undefined)
+    else
+      input(type='hidden' name='old_team', requried='true',value=player_team._id)
     label(for='first_name') First Name:
     input(type='text' name='first_name' placeholder='First Name (John)' required='true' value=(undefined===player ?'': player.first_name))
     label(for='last_name') Last Name:
